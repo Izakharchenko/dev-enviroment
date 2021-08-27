@@ -1,3 +1,4 @@
+FROM node:latest AS node
 FROM php:7.4-apache
 
 # Use development configuration
@@ -16,3 +17,9 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     && apt-get install -y git \
     && apt-get install unzip
+
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+
+CMD [ "npm"]
